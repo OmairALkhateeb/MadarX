@@ -1,19 +1,77 @@
-import React from "react";
+"use client"
+
+import React, { useRef } from "react"
+import { motion, useInView, type Variants } from "framer-motion"
 
 const reviews = [
-  { id: 1, name: "أحمد محمد", text: "خدمة ممتازة وتوصيل سريع! الطعام وصل ساخن ولذيذ. أنصح الجميع بتجربة هذا التطبيق الرائع.", role: "عميل", avatar: "" },
-  { id: 2, name: "فاطمة علي", text: "تطبيق سهل الاستخدام ومتنوع في الخيارات. التوصيل دائماً في الوقت المحدد والجودة عالية.", role: "عميلة", avatar: "" },
-  { id: 3, name: "محمد حسن", text: "أفضل تطبيق توصيل جربته! الأسعار معقولة والخدمة احترافية. شكراً لكم على هذه التجربة الرائعة.", role: "مستقل", avatar: "" },
-  { id: 4, name: "سارة أحمد", text: "خدمة عملاء ممتازة وتشكيلة واسعة من المطاعم. التطبيق سريع ومريح للغاية في الاستخدام.", role: "Freelancer", avatar: "" },
-  { id: 5, name: "عمر خالد", text: "توصيل سريع وطعام طازج دائماً. واجهة التطبيق بسيطة وسهلة. تجربة رائعة في كل مرة!", role: "عميل", avatar: "" },
-  { id: 6, name: "نور الدين", text: "أحب التنوع في الخيارات والعروض المستمرة. الخدمة موثوقة والتوصيل دقيق في المواعيد.", role: "عميل مميز", avatar: "" },
-];
+  {
+    id: 1,
+    name: "أحمد محمد",
+    text: "خدمة ممتازة وتوصيل سريع! الطعام وصل ساخن ولذيذ. أنصح الجميع بتجربة هذا التطبيق الرائع.",
+    role: "عميل",
+    avatar: "",
+  },
+  {
+    id: 2,
+    name: "فاطمة علي",
+    text: "تطبيق سهل الاستخدام ومتنوع في الخيارات. التوصيل دائماً في الوقت المحدد والجودة عالية.",
+    role: "عميلة",
+    avatar: "",
+  },
+  {
+    id: 3,
+    name: "محمد حسن",
+    text: "أفضل تطبيق توصيل جربته! الأسعار معقولة والخدمة احترافية. شكراً لكم على هذه التجربة الرائعة.",
+    role: "مستقل",
+    avatar: "",
+  },
+  {
+    id: 4,
+    name: "سارة أحمد",
+    text: "خدمة عملاء ممتازة وتشكيلة واسعة من المطاعم. التطبيق سريع ومريح للغاية في الاستخدام.",
+    role: "Freelancer",
+    avatar: "",
+  },
+  {
+    id: 5,
+    name: "عمر خالد",
+    text: "توصيل سريع وطعام طازج دائماً. واجهة التطبيق بسيطة وسهلة. تجربة رائعة في كل مرة!",
+    role: "عميل",
+    avatar: "",
+  },
+  {
+    id: 6,
+    name: "نور الدين",
+    text: "أحب التنوع في الخيارات والعروض المستمرة. الخدمة موثوقة والتوصيل دقيق في المواعيد.",
+    role: "عميل مميز",
+    avatar: "",
+  },
+]
 
 export default function ReviewsSection() {
+  const sectionRef = useRef(null)
+  const inView = useInView(sectionRef, { amount: 0.2, once: true })
+
+  const containerVariants: Variants = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.25 }, // delay between items
+    },
+  }
+
+  // ✨ Fade animation only
+  const fadeVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.8, ease: "easeOut" },
+    },
+  }
+
   return (
     <section
+      ref={sectionRef}
       dir="rtl"
-      // Sit behind the previous section's diagonal, and tuck under it
       className="relative -z-10 -mt-[60px] sm:-mt-[80px] md:-mt-[100px] pt-20 md:pt-28 pb-20"
       style={{
         background: "linear-gradient(135deg, #E9DFF7 0%, #F3EBFB 100%)",
@@ -21,20 +79,31 @@ export default function ReviewsSection() {
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          variants={fadeVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             ماذا يقول عملاؤنا
           </h2>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             آراء وتجارب عملائنا الكرام مع خدماتنا المميزة
           </p>
-        </div>
+        </motion.div>
 
         {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
           {reviews.map((review) => (
-            <article
+            <motion.article
               key={review.id}
+              variants={fadeVariants}
               className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 p-6 md:p-7"
             >
               <blockquote className="text-gray-800 leading-relaxed text-sm md:text-base">
@@ -57,21 +126,18 @@ export default function ReviewsSection() {
                 )}
 
                 <div className="text-left">
-                  <div className="font-semibold text-gray-900">{review.name}</div>
-                  <div className="text-sm text-gray-500">{review.role || "عميل"}</div>
+                  <div className="font-semibold text-gray-900">
+                    {review.name}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {review.role || "عميل"}
+                  </div>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-16">
-          {/* <button className="bg-[#6C4BA3] hover:bg-[#5A3D8A] text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg">
-            شاركنا تجربتك
-          </button> */}
-        </div>
+        </motion.div>
       </div>
     </section>
-  );
+  )
 }
